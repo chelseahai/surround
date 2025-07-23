@@ -102,7 +102,7 @@ html, body {
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
   mix-blend-mode: screen;
   opacity: 0.85;
-  transition: all 0.4s ease;
+  transition: all 0.4s ease, transform 0.3s ease;
 }
 
 #interaction-layer {
@@ -111,6 +111,46 @@ html, body {
   height: 100%;
   z-index: 2;
   cursor: none;
+}
+
+/* --- Floating Prompt (unified for readiness + temp) --- */
+#floating-prompt {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 160px;
+  font-size: 0.85rem;
+  color: rgba(80, 80, 100, 0.75);
+  font-family: 'DM Sans', sans-serif;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+  text-align: left;
+  line-height: 1.3em;
+}
+
+#floating-prompt .question {
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.4em;
+  color: #ecd4fc;
+}
+
+#floating-prompt .instruction {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+.soft-action {
+  font-style: italic;
+  color: rgba(120, 120, 150, 0.65);
+  font-size: 0.75rem;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-52%) translateX(3px); }
 }
 
 

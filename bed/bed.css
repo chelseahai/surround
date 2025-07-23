@@ -1,0 +1,32 @@
+#floating-prompt {
+  position: absolute;
+  font-size: 14px;
+  max-width: 180px;
+  color: #ffffff;
+  opacity: 0.75;
+  left: calc(50% + 100px);
+  top: 40%;
+  transform: translateY(-50%);
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+#floating-prompt .question {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 0.4em;
+  color: #ecd4fc;
+}
+
+#floating-prompt .instruction {
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-50%) translateX(10px); }
+  100% { transform: translateY(-50%) translateX(0); }
+}
+
