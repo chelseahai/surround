@@ -20,7 +20,7 @@ layer.addEventListener("mousemove", (e) => {
   const y = e.clientY - rect.top;
   const ratio = 1 - y / rect.height;
   readinessLevel = Math.min(Math.max(ratio, 0), 1);
-  core.style.transform = `scaleY(${0.8 + 0.4 * readinessLevel})`;
+  core.style.transform = `scaleY(${0.8 + 0.8 * readinessLevel})`;
 
   prompt.innerHTML = `
     <div class="question">“How much of you has arrived?”</div>
@@ -181,16 +181,16 @@ layer.addEventListener("mousemove", (e) => {
   const distance = Math.sqrt(dx * dx + dy * dy);
 
   // Make it less sensitive by increasing maxDist
-  const maxDist = Math.min(window.innerWidth, window.innerHeight); // full viewport
+  const maxDist = Math.max(window.innerWidth, window.innerHeight); // full viewport
   let rawValue = 1 - Math.min(distance / maxDist, 1);
 
   // Apply easing for smoother control
-  visibilityIntent = Math.pow(rawValue, 1.5); // easing curve
+  visibilityIntent = Math.pow(1 - Math.min(distance / maxDist, 1), 1.2); // softer curve
 
   // Visual: opacity, blur, and size scaling
-  const opacity = 0.4 + 0.6 * visibilityIntent;
-  const blur = 10 - 8 * visibilityIntent;
-  const scale = 1 + 0.2 * visibilityIntent; // grows up to 20%
+  const opacity = 0.2 + 0.8 * visibilityIntent;
+  const blur = 15 - 15 * visibilityIntent;
+  const scale = 1 + 0.8 * visibilityIntent; // grows up to 80%
 
   core.style.opacity = opacity.toFixed(2);
   core.style.filter = `blur(${blur}px)`;
