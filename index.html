@@ -5,31 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Urban Aware Interface</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="window/window.css" />
 </head>
 <body>
   <div id="container">
     <div class="panel" id="panel1">Intro</div>
 
- <div class="panel" id="panel2">
-  <div id="mirror-container">
-    <div id="ghost-figure">
-      <div id="aura-layer"></div>
-      <div id="body-core"></div>
+    <!-- PANEL 2: THE MIRROR -->
+    <div class="panel" id="panel2">
+      <div id="mirror-container">
+        <div id="ghost-figure">
+          <div id="aura-layer"></div>
+          <div id="body-core"></div>
+        </div>
+        <div id="sparkle-container"></div>
+        <div id="floating-prompt"></div>
+        <div id="interaction-layer"></div>
+      </div>
     </div>
-    <div id="sparkle-container"></div>
-    <div id="floating-prompt"></div>
-    <div id="interaction-layer"></div>
-  </div>
-</div>
 
-    <div class="panel" id="panel3">Window</div>
+    <!-- PANEL 3: THE WINDOW -->
+    <div class="panel" id="panel3">
+      <div id="window-panel" class="window-container">
+        <div class="window-overlay">
+          <div class="window-inputs">
+            <input type="text" id="start-location" placeholder="Start location" />
+            <input type="text" id="end-location" placeholder="Destination" />
+            <button id="route-btn">Show Route</button>
+          </div>
+          <div id="window-view">
+            <canvas id="sky-canvas"></canvas>
+            <div id="map-overlay"></div>
+          </div>
+          <div class="floating-prompt">
+            <p class="question">Where are you going today?</p>
+            <p class="instruction">Type your route—your journey will shape the sky.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="panel4">Wardrobe</div>
     <div class="panel" id="panel5">Door / Mirror</div>
   </div>
 
   <div id="custom-cursor"></div>
-  
+
   <script src="script.js"></script>
   <script src="bed/bed.js"></script>
+  <script src="window/window.js"></script>
 </body>
 </html>
+

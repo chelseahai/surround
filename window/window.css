@@ -1,0 +1,105 @@
+/* PANEL 3: WINDOW */
+#window-panel {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to top, #87ceeb, #fefefe);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.window-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.window-inputs {
+  position: absolute;
+  top: 10%;
+  display: flex;
+  gap: 1rem;
+  z-index: 2;
+}
+
+.window-inputs input,
+.window-inputs button {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+}
+
+#window-view {
+  width: 80%;
+  height: 60%;
+  position: relative;
+  border: 6px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#sky-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: linear-gradient(to top, #f9d29d, #f1f2b5);
+}
+
+#map-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-prompt {
+  position: absolute;
+  bottom: 10%;
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  animation: floatPrompt 4s ease-in-out infinite;
+}
+
+@keyframes floatPrompt {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Floating Prompt Styling for Window Panel */
+.floating-prompt {
+  position: absolute;
+  bottom: 8%;
+  text-align: center;
+  color: white;
+  opacity: 0.85;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  animation: floatPrompt 4s ease-in-out infinite;
+}
+
+.floating-prompt .question {
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.floating-prompt .instruction {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+/* Subtle floating animation (reuse from Bed panel) */
+@keyframes floatPrompt {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
