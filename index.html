@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Urban Aware Interface</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="window/window.css" />
 </head>
@@ -34,8 +36,8 @@
             <button id="route-btn">Show Route</button>
           </div>
           <div id="window-view">
+            <div id="map-container"></div>
             <canvas id="sky-canvas"></canvas>
-            <div id="map-overlay"></div>
           </div>
           <div class="floating-prompt">
             <p class="question">Where are you going today?</p>
@@ -56,4 +58,3 @@
   <script src="window/window.js"></script>
 </body>
 </html>
-

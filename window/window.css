@@ -20,62 +20,102 @@
   align-items: center;
 }
 
+/* Inputs Container */
 .window-inputs {
   position: absolute;
   top: 10%;
   display: flex;
   gap: 1rem;
-  z-index: 2;
+  z-index: 5; /* Ensure above custom cursor */
+  opacity: 1;
+  transition: opacity 1.5s ease;
 }
 
+/* Fade-out class */
+.window-inputs.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Inputs + Button Glass Styling */
 .window-inputs input,
 .window-inputs button {
-  padding: 10px 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
   font-size: 1rem;
   outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 0 6px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
 }
 
+/* Input text color fix */
+.window-inputs input {
+  min-width: 200px;
+  color: #222; /* Black text for readability */
+}
+
+/* Input placeholder color */
+.window-inputs input::placeholder {
+  color: rgba(50, 50, 50, 0.6);
+}
+
+/* Button text white */
+.window-inputs button {
+  color: #222;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Hover effect */
+.window-inputs input:hover,
+.window-inputs button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* Focus effect */
+.window-inputs input:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Glass Window Frame */
 #window-view {
+  position: relative;
   width: 80%;
   height: 60%;
-  position: relative;
-  border: 6px solid rgba(255, 255, 255, 0.6);
   border-radius: 20px;
   overflow: hidden;
+  border: 6px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(12px);
+}
+
+/* Map + Sky Layers */
+#map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 #sky-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  display: block;
-  background: linear-gradient(to top, #f9d29d, #f1f2b5);
+  z-index: 0; /* Behind map */
+  pointer-events: none;
 }
 
-#map-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.floating-prompt {
-  position: absolute;
-  bottom: 10%;
-  text-align: center;
-  color: white;
-  font-size: 1.2rem;
-  opacity: 0.8;
-  animation: floatPrompt 4s ease-in-out infinite;
-}
-
-@keyframes floatPrompt {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* Floating Prompt Styling for Window Panel */
+/* Floating Prompt */
 .floating-prompt {
   position: absolute;
   bottom: 8%;
@@ -98,8 +138,34 @@
   opacity: 0.75;
 }
 
-/* Subtle floating animation (reuse from Bed panel) */
+/* Floating animation */
 @keyframes floatPrompt {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
+}
+
+/* Dropdown Menu for Autocomplete */
+.dropdown {
+  position: absolute;
+  top: 45px; /* Just below input */
+  left: 0;
+  width: 100%;
+  background: white;
+  color: black; /* Black font for now */
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: inherit;
+}
+
+.dropdown-item {
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
 }
