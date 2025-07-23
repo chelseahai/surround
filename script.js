@@ -59,15 +59,6 @@ window.addEventListener('wheel', (e) => {
 });
 
 
-// --- CUSTOM CURSOR ---
-const customCursor = document.getElementById("custom-cursor");
-
-document.addEventListener("mousemove", (e) => {
-  customCursor.style.transform = `translate(${e.clientX - 9}px, ${e.clientY - 9}px)`;
-});
-
-
-
 
 
 
