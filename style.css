@@ -228,6 +228,20 @@ html, body {
   50% { transform: translateY(-52%) translateX(3px); }
 }
 
+/* === Custom Cursor === */
+#custom-cursor {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color:#0f0e0f;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease-out;
+  z-index: 9999;
+}
+
 
 
 
