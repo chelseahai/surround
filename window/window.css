@@ -18,7 +18,7 @@
   gap: 5vw;
   transition: transform 1.5s ease;
   will-change: transform;
-  transform: translateX(calc(50% - 0%)); /* Center map window */
+  transform: translateX(calc(50% - (0% - 10%))); /* Center map window */
 }
 
 /* Phase 2: Reveal – shift left so both windows are centered */
