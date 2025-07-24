@@ -1,31 +1,29 @@
 /* PANEL 3: WINDOW LAYOUT */
 .window-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 5vw;
   width: 100vw;
   height: 100vh;
   padding-top: 5vh;
   background: #eaeef2;
   overflow: hidden;
-  transition: all 1.5s ease;
-}
-
-/* Each block holds a window and its caption */
-.window-block {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-.window-caption {
-  margin-top: 12px;
-  font-size: 1rem;
-  color: #333;
-  opacity: 0.85;
-  text-align: center;
-  max-width: 70vh;
+/* STRIP WRAPPER */
+/* Phase 1: Map centered initially */
+.window-strip {
+  display: flex;
+  gap: 5vw;
+  transition: transform 1.5s ease;
+  will-change: transform;
+  transform: translateX(calc(50% - 0%)); /* Center map window */
+}
+
+/* Phase 2: Reveal – shift left so both windows are centered */
+.window-container.reveal .window-strip {
+  transform: translateX(calc(50% - 50%)); /* Center the full strip dynamically */
 }
 
 /* Shared window frame style */
@@ -40,22 +38,6 @@
   box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.2),
               0 8px 32px rgba(0, 0, 0, 0.3);
   position: relative;
-  transition: transform 1.5s ease, opacity 1.2s ease;
-}
-
-/* Initial: map visible, viz hidden */
-.map-window {
-  opacity: 1;
-}
-.viz-window {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-/* Reveal: both visible */
-.window-container.reveal .viz-window {
-  opacity: 1;
-  transform: scale(1);
 }
 
 /* ===========================

@@ -193,10 +193,9 @@ document.getElementById('route-btn').addEventListener('click', async () => {
     function handleRouteReady() {
       if (currentStage !== 'route-ready') return;
 
-      // Trigger cinematic reveal
+      // Trigger the strip slide effect
       document.querySelector('.window-container').classList.add('reveal');
 
-      // After transition delay, start SUN stage
       setTimeout(() => {
         document.querySelector('.floating-prompt').innerHTML = `
           <p class="instruction">Hover over the route—notice how the light shifts.</p>
@@ -204,7 +203,7 @@ document.getElementById('route-btn').addEventListener('click', async () => {
           <p class="continue">(Click anywhere to continue)</p>
         `;
         currentStage = 'sun';
-      }, 1500); // Matches CSS transition duration
+      }, 1500);
 
       document.body.removeEventListener('click', handleRouteReady);
     }
@@ -244,12 +243,10 @@ document.getElementById('route-btn').addEventListener('click', async () => {
 
       const sunValue = window.routeSegments[closestIndex].sun;
 
-      // Update route highlight color
       const routeColor = `rgba(255, ${200 + sunValue * 55}, 0, 1)`;
       map.setPaintProperty('route-highlight', 'line-color', routeColor);
       map.setPaintProperty('route-highlight', 'line-opacity', 0.9);
 
-      // Update glare effect
       glareOverlay.style.background = `
         radial-gradient(circle at ${e.point.x}px ${e.point.y}px,
           rgba(255, ${200 + sunValue * 55}, 0, ${0.1 + sunValue * 0.25}),
@@ -265,7 +262,6 @@ document.getElementById('route-btn').addEventListener('click', async () => {
       glareOverlay.style.background = 'rgba(255,230,150,0)';
     });
 
-    // Global click to move from SUN to WIND
     function handleSunComplete() {
       if (currentStage !== 'sun') return;
 
@@ -294,5 +290,3 @@ document.getElementById('route-btn').addEventListener('click', async () => {
     console.error('Route computation failed.', error);
   }
 });
-
-
