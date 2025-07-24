@@ -23,7 +23,7 @@
 
 /* Phase 2: Reveal – shift left so both windows are centered */
 .window-container.reveal .window-strip {
-  transform: translateX(calc(50% - 50%)); /* Center the full strip dynamically */
+  transform: translateX(calc(50% - 60%)); /* Center the full strip dynamically */
 }
 
 /* Shared window frame style */
