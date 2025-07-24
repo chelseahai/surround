@@ -63,7 +63,7 @@
   color: rgba(50, 50, 50, 0.6);
 }
 
-/* Button text white */
+/* Button text */
 .window-inputs button {
   color: #222;
   font-weight: 500;
@@ -84,18 +84,55 @@
   outline: 2px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Glass Window Frame */
+/* Dropdown Menu for Autocomplete */
+.dropdown {
+  position: absolute;
+  top: 45px; /* Just below input */
+  left: 0;
+  width: 100%;
+  background: white;
+  color: black;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: inherit;
+}
+
+.dropdown-item {
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+/* ===========================
+   WINDOW PANEL VISUAL DESIGN
+   =========================== */
+
+/* Window frame styling (final) */
 #window-view {
   position: relative;
   width: 80%;
-  height: 60%;
+  height: 65%;
   border-radius: 20px;
   overflow: hidden;
-  border: 6px solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(12px);
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.15),
+              0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Map + Sky Layers */
+/* Map container inside window */
 #map-container {
   position: absolute;
   top: 0;
@@ -105,17 +142,39 @@
   z-index: 1;
 }
 
+/* Sky gradient canvas */
 #sky-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; /* Behind map */
+  z-index: 0;
   pointer-events: none;
 }
 
-/* Floating Prompt */
+/* Glare overlay on the glass */
+#glare-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  background: rgba(255, 230, 150, 0); /* Initial transparent */
+  mix-blend-mode: screen; /* Creates glare effect */
+  transition: background 0.3s ease;
+  animation: shimmer 6s infinite ease-in-out;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { filter: blur(0px) brightness(1); }
+  50% { filter: blur(6px) brightness(1.2); }
+  100% { filter: blur(0px) brightness(1); }
+}
+
+/* Floating prompts */
 .floating-prompt {
   position: absolute;
   bottom: 8%;
@@ -124,6 +183,7 @@
   opacity: 0.85;
   font-size: 1.4rem;
   line-height: 1.5;
+  z-index: 30;
   animation: floatPrompt 4s ease-in-out infinite;
 }
 
@@ -144,28 +204,38 @@
   50% { transform: translateY(-6px); }
 }
 
-/* Dropdown Menu for Autocomplete */
-.dropdown {
+/* Glare overlay enhancements */
+#glare-overlay {
   position: absolute;
-  top: 45px; /* Just below input */
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: background 0.3s ease;
+  animation: shimmer 6s infinite ease-in-out, pulse 3s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { filter: blur(0px) brightness(1); }
+  50% { filter: blur(6px) brightness(1.2); }
+  100% { filter: blur(0px) brightness(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+}
+
+#wind-canvas {
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100%;
-  background: white;
-  color: black; /* Black font for now */
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  max-height: 180px;
-  overflow-y: auto;
-  font-family: inherit;
-}
-
-.dropdown-item {
-  padding: 10px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background: #f0f0f0;
+  height: 100%;
+  z-index: 25; /* Above glare, below prompts */
+  pointer-events: none;
+  opacity: 0.7;
+  filter: blur(1.5px);
 }

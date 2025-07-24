@@ -4,9 +4,11 @@
 // 2. Autocomplete dropdown for Start & End inputs
 // 3. Store coords for selected locations
 // 4. Simulate environmental floats for Wardrobe panel
-// 5. Keep UI functional (black fonts for now)
+// 5. Visualize SUN attribute dynamically with highlight + glare overlay + stage captions
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlbHNlYWpoYWkiLCJhIjoiY21kZzUwMWdlMDJ3eDJscTN3ZHo4a3BnaiJ9.FPb-7G9NQu3oeHIg_ZZy0w'; // Replace with your Mapbox token
+
+let currentStage = 'sun'; // Track which attribute is active
 
 // -------------------------
 // 1. Initialize Map
@@ -16,7 +18,7 @@ const map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/light-v11',
   center: [-73.985428, 40.748817], // Manhattan center
   zoom: 12,
-  interactive: false
+  interactive: true
 });
 
 map.scrollZoom.disable();
@@ -25,7 +27,7 @@ map.doubleClickZoom.disable();
 map.touchZoomRotate.disable();
 
 // -------------------------
-// 2. Sky Canvas
+// 2. Sky Canvas (Background Gradient)
 // -------------------------
 const canvas = document.getElementById('sky-canvas');
 const ctx = canvas.getContext('2d');
@@ -56,7 +58,7 @@ async function fetchSuggestions(query, inputId) {
     return;
   }
 
-  const nycBounds = "-74.25909,40.477399,-73.700272,40.917577"; // NYC bounding box
+  const nycBounds = "-74.25909,40.477399,-73.700272,40.917577";
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
               `access_token=${mapboxgl.accessToken}&autocomplete=true&bbox=${nycBounds}&types=poi,address&limit=5`;
 
@@ -84,7 +86,7 @@ function showDropdown(suggestions, inputId) {
     dropdown = document.createElement('div');
     dropdown.id = `${inputId}-dropdown`;
     dropdown.className = 'dropdown';
-    input.parentNode.style.position = 'relative'; // Ensure relative for absolute dropdown
+    input.parentNode.style.position = 'relative';
     input.parentNode.appendChild(dropdown);
   }
 
@@ -104,7 +106,6 @@ function hideDropdown(inputId) {
   if (dropdown) dropdown.innerHTML = '';
 }
 
-// Attach listeners for autocomplete
 ['start-location', 'end-location'].forEach(id => {
   const input = document.getElementById(id);
   input.addEventListener('input', e => fetchSuggestions(e.target.value, id));
@@ -142,8 +143,6 @@ document.getElementById('route-btn').addEventListener('click', async () => {
   }
 
   try {
-    console.log(`Start coords: ${startCoords}, End coords: ${endCoords}`);
-
     const coords = await getRoute(startCoords, endCoords);
 
     const routeGeoJSON = {
@@ -151,7 +150,7 @@ document.getElementById('route-btn').addEventListener('click', async () => {
       features: [{
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: coords },
-        properties: { env_weight: 0.5 }
+        properties: {}
       }]
     };
 
@@ -169,31 +168,119 @@ document.getElementById('route-btn').addEventListener('click', async () => {
           'line-opacity': 0.9
         }
       });
+
+      // Highlight layer
+      map.addLayer({
+        id: 'route-highlight',
+        type: 'line',
+        source: 'route',
+        paint: {
+          'line-width': 10,
+          'line-color': '#FFD700',
+          'line-opacity': 0
+        }
+      });
     }
 
     const bounds = coords.reduce((b, coord) => b.extend(coord), new mapboxgl.LngLatBounds(coords[0], coords[0]));
     map.fitBounds(bounds, { padding: 50 });
 
-    // Simulated environmental floats
     const timeOfDay = Math.random();
-    window.windowFloats = {
-      avgSun: Math.random(),
-      avgWind: Math.random(),
-      avgCrowd: Math.random(),
-      avgShade: Math.random(),
-      timeOfDay: timeOfDay
-    };
-    console.log('Simulated floats for Wardrobe:', window.windowFloats);
-
     drawSkyGradient(timeOfDay);
 
     document.querySelector('.window-inputs').classList.add('fade-out');
+
+    // Update floating prompt for SUN stage
+    document.querySelector('.floating-prompt').innerHTML = `
+      <p class="instruction">Hover over the route—notice how the light shifts.</p>
+      <p class="question">Is today about brightness or calm?</p>
+      <p class="continue">(Click to continue)</p>
+    `;
+
+    // Generate simulated attributes
+    window.routeSegments = coords.map((point) => ({
+      coord: point,
+      sun: Math.random(),
+      wind: Math.random(),
+      shade: Math.random(),
+      crowd: Math.random()
+    }));
+
+    console.log('Route segments:', window.routeSegments);
+
+    // Hover logic for SUN
+    const glareOverlay = document.getElementById('glare-overlay');
+
+    map.on('mousemove', 'route-layer', (e) => {
+      if (currentStage !== 'sun') return;
+
+      const hoveredPoint = [e.lngLat.lng, e.lngLat.lat];
+
+      // Find nearest route segment
+      let closestIndex = 0;
+      let minDist = Infinity;
+      window.routeSegments.forEach((seg, i) => {
+        const dx = seg.coord[0] - hoveredPoint[0];
+        const dy = seg.coord[1] - hoveredPoint[1];
+        const dist = dx * dx + dy * dy;
+        if (dist < minDist) {
+          minDist = dist;
+          closestIndex = i;
+        }
+      });
+
+      const sunValue = window.routeSegments[closestIndex].sun;
+
+      // Update highlight layer color
+      const routeColor = `rgba(255, ${200 + sunValue * 55}, 0, 1)`;
+      map.setPaintProperty('route-highlight', 'line-color', routeColor);
+      map.setPaintProperty('route-highlight', 'line-opacity', 0.9);
+
+      // Sync glare color with route highlight, radial gradient effect
+      glareOverlay.style.background = `
+        radial-gradient(circle at ${e.point.x}px ${e.point.y}px,
+          rgba(255, ${200 + sunValue * 55}, 0, ${0.1 + sunValue * 0.25}),
+          rgba(255, ${200 + sunValue * 55}, 0, 0) 80%)
+      `;
+
+      // Glass distortion effect
+      glareOverlay.style.backdropFilter = `blur(${4 + sunValue * 4}px) brightness(${1 + sunValue * 0.2})`;
+      glareOverlay.style.webkitBackdropFilter = glareOverlay.style.backdropFilter;
+    });
+
+    map.on('mouseleave', 'route-layer', () => {
+      if (currentStage !== 'sun') return;
+      map.setPaintProperty('route-highlight', 'line-opacity', 0);
+      glareOverlay.style.background = 'rgba(255,230,150,0)';
+    });
+
+    // Click to continue to next stage
+    map.on('click', 'route-layer', () => {
+      if (currentStage !== 'sun') return;
+
+      // Clear SUN effects
+      map.setPaintProperty('route-highlight', 'line-opacity', 0);
+      glareOverlay.style.background = 'rgba(255,230,150,0)';
+
+      // Move to next stage
+      currentStage = 'wind';
+
+      // Update floating prompt
+      document.querySelector('.floating-prompt').innerHTML = `
+        <p class="instruction">Next: Feel the wind’s motion.</p>
+        <p class="continue">(Hover and click when ready)</p>
+      `;
+
+      console.log('SUN stage complete → WIND stage next.');
+
+      // Trigger WIND stage
+      if (typeof startWindInteraction === 'function') {
+        startWindInteraction();
+      }
+    });
 
   } catch (error) {
     console.error('Route computation failed.', error);
   }
 });
-
-
-
 
