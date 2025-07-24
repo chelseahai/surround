@@ -1,43 +1,86 @@
-/* PANEL 3: WINDOW */
-#window-panel {
+/* PANEL 3: WINDOW LAYOUT */
+.window-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5vw;
   width: 100vw;
   height: 100vh;
-  position: relative;
+  padding-top: 5vh;
+  background: #eaeef2;
   overflow: hidden;
-  background: linear-gradient(to top, #87ceeb, #fefefe);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  transition: all 1.5s ease;
 }
 
-.window-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+/* Each block holds a window and its caption */
+.window-block {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
-/* Inputs Container */
-.window-inputs {
-  position: absolute;
-  top: 10%;
-  display: flex;
-  gap: 1rem;
-  z-index: 5; /* Ensure above custom cursor */
-  opacity: 1;
-  transition: opacity 1.5s ease;
+.window-caption {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: #333;
+  opacity: 0.85;
+  text-align: center;
+  max-width: 70vh;
 }
 
-/* Fade-out class */
+/* Shared window frame style */
+.window-frame {
+  width: 70vh;
+  height: 70vh;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 8px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.2),
+              0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: transform 1.5s ease, opacity 1.2s ease;
+}
+
+/* Initial: map visible, viz hidden */
+.map-window {
+  opacity: 1;
+}
+.viz-window {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Reveal: both visible */
+.window-container.reveal .viz-window {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ===========================
+   MAP CONTENT + INPUTS
+   =========================== */
+#map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.window-inputs {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 5;
+  transition: opacity 1s ease;
+}
 .window-inputs.fade-out {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Inputs + Button Glass Styling */
 .window-inputs input,
 .window-inputs button {
   padding: 10px 16px;
@@ -47,23 +90,16 @@
   outline: none;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 0 6px rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
-
-/* Input text color fix */
 .window-inputs input {
   min-width: 200px;
-  color: #222; /* Black text for readability */
+  color: #222;
 }
-
-/* Input placeholder color */
 .window-inputs input::placeholder {
   color: rgba(50, 50, 50, 0.6);
 }
-
-/* Button text */
 .window-inputs button {
   color: #222;
   font-weight: 500;
@@ -71,25 +107,20 @@
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
-
-/* Hover effect */
 .window-inputs input:hover,
 .window-inputs button:hover {
   background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 0 8px rgba(255, 255, 255, 0.4);
 }
-
-/* Focus effect */
 .window-inputs input:focus {
   outline: 2px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Dropdown Menu for Autocomplete */
+/* Dropdown */
 .dropdown {
   position: absolute;
-  top: 45px; /* Just below input */
+  top: 100%;
   left: 0;
-  width: 100%;
+  width: max-content;
   background: white;
   color: black;
   border-radius: 6px;
@@ -97,52 +128,19 @@
   z-index: 10;
   max-height: 180px;
   overflow-y: auto;
-  font-family: inherit;
 }
-
 .dropdown-item {
   padding: 10px;
   font-size: 0.9rem;
   cursor: pointer;
 }
-
 .dropdown-item:hover {
   background: #f0f0f0;
 }
 
 /* ===========================
-   WINDOW PANEL VISUAL DESIGN
+   VIZ WINDOW CONTENT
    =========================== */
-
-/* Window frame styling (final) */
-#window-view {
-  position: relative;
-  width: 80%;
-  height: 65%;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 6px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.15),
-              0 8px 32px rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Map container inside window */
-#map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-/* Sky gradient canvas */
 #sky-canvas {
   position: absolute;
   top: 0;
@@ -153,28 +151,47 @@
   pointer-events: none;
 }
 
-/* Glare overlay on the glass */
 #glare-overlay {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   z-index: 20;
   pointer-events: none;
-  background: rgba(255, 230, 150, 0); /* Initial transparent */
-  mix-blend-mode: screen; /* Creates glare effect */
+  background: rgba(255, 230, 150, 0);
+  mix-blend-mode: screen;
   transition: background 0.3s ease;
-  animation: shimmer 6s infinite ease-in-out;
+  animation: shimmer 6s infinite ease-in-out, pulse 3s infinite ease-in-out;
 }
-
-/* Shimmer animation */
 @keyframes shimmer {
   0% { filter: blur(0px) brightness(1); }
   50% { filter: blur(6px) brightness(1.2); }
   100% { filter: blur(0px) brightness(1); }
 }
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+}
 
-/* Floating prompts */
+#wind-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(200, 230, 255, 0);
+  mix-blend-mode: overlay;
+  transition: opacity 0.8s ease, background 0.3s ease, filter 0.3s ease;
+  animation: windFlow 6s infinite linear;
+  filter: blur(3px);
+}
+@keyframes windFlow {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(15px); }
+  100% { transform: translateX(0); }
+}
+
+/* Floating prompt */
 .floating-prompt {
   position: absolute;
   bottom: 8%;
@@ -186,56 +203,16 @@
   z-index: 30;
   animation: floatPrompt 4s ease-in-out infinite;
 }
-
 .floating-prompt .question {
   font-weight: 600;
   font-size: 1.4rem;
   margin-bottom: 8px;
 }
-
 .floating-prompt .instruction {
   font-size: 1rem;
   opacity: 0.75;
 }
-
-/* Floating animation */
 @keyframes floatPrompt {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
-}
-
-/* Glare overlay enhancements */
-#glare-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 20;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  transition: background 0.3s ease;
-  animation: shimmer 6s infinite ease-in-out, pulse 3s infinite ease-in-out;
-}
-
-@keyframes shimmer {
-  0% { filter: blur(0px) brightness(1); }
-  50% { filter: blur(6px) brightness(1.2); }
-  100% { filter: blur(0px) brightness(1); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.8; }
-}
-
-#wind-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 25; /* Above glare, below prompts */
-  pointer-events: none;
-  opacity: 0.7;
-  filter: blur(1.5px);
 }

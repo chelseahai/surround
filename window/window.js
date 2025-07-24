@@ -1,14 +1,6 @@
-// PANEL 3: THE WINDOW LOGIC
-// Features:
-// 1. Mapbox Map + Directions API routing
-// 2. Autocomplete dropdown for Start & End inputs
-// 3. Store coords for selected locations
-// 4. Simulate environmental floats for Wardrobe panel
-// 5. Visualize SUN attribute dynamically with highlight + glare overlay + stage captions
+mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlbHNlYWpoYWkiLCJhIjoiY21kZzUwMWdlMDJ3eDJscTN3ZHo4a3BnaiJ9.FPb-7G9NQu3oeHIg_ZZy0w';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlbHNlYWpoYWkiLCJhIjoiY21kZzUwMWdlMDJ3eDJscTN3ZHo4a3BnaiJ9.FPb-7G9NQu3oeHIg_ZZy0w'; // Replace with your Mapbox token
-
-let currentStage = 'sun'; // Track which attribute is active
+let currentStage = ''; // No stage initially
 
 // -------------------------
 // 1. Initialize Map
@@ -27,7 +19,7 @@ map.doubleClickZoom.disable();
 map.touchZoomRotate.disable();
 
 // -------------------------
-// 2. Sky Canvas (Background Gradient)
+// 2. Sky Canvas
 // -------------------------
 const canvas = document.getElementById('sky-canvas');
 const ctx = canvas.getContext('2d');
@@ -190,14 +182,36 @@ document.getElementById('route-btn').addEventListener('click', async () => {
 
     document.querySelector('.window-inputs').classList.add('fade-out');
 
-    // Update floating prompt for SUN stage
+    // Prompt user before reveal
     document.querySelector('.floating-prompt').innerHTML = `
-      <p class="instruction">Hover over the route—notice how the light shifts.</p>
-      <p class="question">Is today about brightness or calm?</p>
-      <p class="continue">(Click to continue)</p>
+      <p class="instruction">Here’s your route. Click anywhere to continue.</p>
     `;
 
-    // Generate simulated attributes
+    currentStage = 'route-ready';
+
+    // Add click handler for reveal transition
+    function handleRouteReady() {
+      if (currentStage !== 'route-ready') return;
+
+      // Trigger cinematic reveal
+      document.querySelector('.window-container').classList.add('reveal');
+
+      // After transition delay, start SUN stage
+      setTimeout(() => {
+        document.querySelector('.floating-prompt').innerHTML = `
+          <p class="instruction">Hover over the route—notice how the light shifts.</p>
+          <p class="question">Is today about brightness or calm?</p>
+          <p class="continue">(Click anywhere to continue)</p>
+        `;
+        currentStage = 'sun';
+      }, 1500); // Matches CSS transition duration
+
+      document.body.removeEventListener('click', handleRouteReady);
+    }
+
+    document.body.addEventListener('click', handleRouteReady);
+
+    // Prepare environmental data
     window.routeSegments = coords.map((point) => ({
       coord: point,
       sun: Math.random(),
@@ -216,7 +230,6 @@ document.getElementById('route-btn').addEventListener('click', async () => {
 
       const hoveredPoint = [e.lngLat.lng, e.lngLat.lat];
 
-      // Find nearest route segment
       let closestIndex = 0;
       let minDist = Infinity;
       window.routeSegments.forEach((seg, i) => {
@@ -231,19 +244,17 @@ document.getElementById('route-btn').addEventListener('click', async () => {
 
       const sunValue = window.routeSegments[closestIndex].sun;
 
-      // Update highlight layer color
+      // Update route highlight color
       const routeColor = `rgba(255, ${200 + sunValue * 55}, 0, 1)`;
       map.setPaintProperty('route-highlight', 'line-color', routeColor);
       map.setPaintProperty('route-highlight', 'line-opacity', 0.9);
 
-      // Sync glare color with route highlight, radial gradient effect
+      // Update glare effect
       glareOverlay.style.background = `
         radial-gradient(circle at ${e.point.x}px ${e.point.y}px,
           rgba(255, ${200 + sunValue * 55}, 0, ${0.1 + sunValue * 0.25}),
           rgba(255, ${200 + sunValue * 55}, 0, 0) 80%)
       `;
-
-      // Glass distortion effect
       glareOverlay.style.backdropFilter = `blur(${4 + sunValue * 4}px) brightness(${1 + sunValue * 0.2})`;
       glareOverlay.style.webkitBackdropFilter = glareOverlay.style.backdropFilter;
     });
@@ -254,33 +265,34 @@ document.getElementById('route-btn').addEventListener('click', async () => {
       glareOverlay.style.background = 'rgba(255,230,150,0)';
     });
 
-    // Click to continue to next stage
-    map.on('click', 'route-layer', () => {
+    // Global click to move from SUN to WIND
+    function handleSunComplete() {
       if (currentStage !== 'sun') return;
-
-      // Clear SUN effects
-      map.setPaintProperty('route-highlight', 'line-opacity', 0);
-      glareOverlay.style.background = 'rgba(255,230,150,0)';
-
-      // Move to next stage
-      currentStage = 'wind';
-
-      // Update floating prompt
-      document.querySelector('.floating-prompt').innerHTML = `
-        <p class="instruction">Next: Feel the wind’s motion.</p>
-        <p class="continue">(Hover and click when ready)</p>
-      `;
 
       console.log('SUN stage complete → WIND stage next.');
 
-      // Trigger WIND stage
+      map.setPaintProperty('route-highlight', 'line-opacity', 0);
+      glareOverlay.style.background = 'rgba(255,230,150,0)';
+
+      document.querySelector('.floating-prompt').innerHTML = `
+        <p class="instruction">Next: Feel the wind’s motion.</p>
+        <p class="continue">(Click anywhere to continue)</p>
+      `;
+
+      currentStage = 'wind';
+
       if (typeof startWindInteraction === 'function') {
         startWindInteraction();
       }
-    });
+
+      document.body.removeEventListener('click', handleSunComplete);
+    }
+
+    document.body.addEventListener('click', handleSunComplete);
 
   } catch (error) {
     console.error('Route computation failed.', error);
   }
 });
+
 

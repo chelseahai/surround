@@ -1,88 +1,35 @@
-// WIND Interaction Logic
-// Creates flowing streaks simulating wind intensity
-
-let windCanvas, windCtx;
-let streaks = [];
-let animationFrame;
-let windActive = false;
-let windSpeedFactor = 0.5; // Base speed
-
-function initWindCanvas() {
-  windCanvas = document.getElementById('wind-canvas');
-  windCtx = windCanvas.getContext('2d');
-  resizeWindCanvas();
-  window.addEventListener('resize', resizeWindCanvas);
-  createStreaks();
-}
-
-function resizeWindCanvas() {
-  windCanvas.width = windCanvas.offsetWidth;
-  windCanvas.height = windCanvas.offsetHeight;
-}
-
-// Generate streaks
-function createStreaks(count = 40) {
-  streaks = [];
-  for (let i = 0; i < count; i++) {
-    streaks.push({
-      x: Math.random() * windCanvas.width,
-      y: Math.random() * windCanvas.height,
-      length: 40 + Math.random() * 60,
-      speed: 0.5 + Math.random() * 1,
-      opacity: 0.2 + Math.random() * 0.4,
-      color: `hsla(${190 + Math.random() * 20}, 60%, 85%, 0.6)`
-    });
-  }
-}
-
-function drawWind() {
-  windCtx.clearRect(0, 0, windCanvas.width, windCanvas.height);
-  for (let s of streaks) {
-    windCtx.strokeStyle = s.color;
-    windCtx.globalAlpha = s.opacity;
-    windCtx.lineWidth = 2;
-    windCtx.beginPath();
-    windCtx.moveTo(s.x, s.y);
-    windCtx.lineTo(s.x - s.length, s.y);
-    windCtx.stroke();
-
-    // Move streak based on wind intensity
-    s.x += (s.speed + windSpeedFactor) * -1;
-    if (s.x + s.length < 0) {
-      s.x = windCanvas.width + Math.random() * 50;
-      s.y = Math.random() * windCanvas.height;
-    }
-  }
-  animationFrame = requestAnimationFrame(drawWind);
-}
-
-// Control wind intensity on hover
-function updateWindEffect(windValue) {
-  // Adjust speed factor based on wind value
-  windSpeedFactor = 0.5 + windValue * 4; // Higher wind = faster streaks
-}
-
-// Start WIND stage
 function startWindInteraction() {
-  if (!windCanvas) initWindCanvas();
-  windActive = true;
-  cancelAnimationFrame(animationFrame);
-  drawWind();
+  console.log('Starting WIND interaction...');
 
-  document.querySelector('.floating-prompt').innerHTML = `
-    <p class="instruction">Hover over the route—feel the wind's motion.</p>
-    <p class="question">Is the air calm or rushing?</p>
-    <p class="continue">(Click to continue)</p>
+  const promptContainer = document.querySelector('.floating-prompt');
+  const windOverlay = document.getElementById('wind-overlay');
+  const windowContainer = document.querySelector('.window-container');
+
+  // Ensure we are in reveal mode before activating WIND
+  if (!windowContainer.classList.contains('reveal')) {
+    console.warn('WIND interaction blocked: reveal mode not active yet.');
+    return;
+  }
+
+  // Show overlay and update prompt
+  windOverlay.style.opacity = 1;
+  promptContainer.innerHTML = `
+    <p class="instruction">Feel the wind’s motion—hover to sense the flow.</p>
+    <p class="question">Is the breeze gentle or racing?</p>
+    <p class="continue">(Click anywhere to continue)</p>
   `;
 
-  // Bind hover logic for WIND
+  let windValue = 0;
+
+  // Hover over route → update overlay based on wind intensity
   map.on('mousemove', 'route-layer', (e) => {
     if (currentStage !== 'wind') return;
 
     const hoveredPoint = [e.lngLat.lng, e.lngLat.lat];
+
+    // Find nearest route segment
     let closestIndex = 0;
     let minDist = Infinity;
-
     window.routeSegments.forEach((seg, i) => {
       const dx = seg.coord[0] - hoveredPoint[0];
       const dy = seg.coord[1] - hoveredPoint[1];
@@ -93,25 +40,53 @@ function startWindInteraction() {
       }
     });
 
-    const windValue = window.routeSegments[closestIndex].wind;
-    updateWindEffect(windValue);
+    windValue = window.routeSegments[closestIndex].wind;
+
+    // Update overlay appearance dynamically
+    windOverlay.style.background = `rgba(200,230,255,${0.1 + windValue * 0.4})`;
+    windOverlay.style.filter = `blur(${2 + windValue * 8}px) brightness(${1 + windValue * 0.3})`;
+
+    // Update route highlight for WIND (optional)
+    const windColor = `rgba(100, ${180 + windValue * 70}, 255, 1)`;
+    map.setPaintProperty('route-highlight', 'line-color', windColor);
+    map.setPaintProperty('route-highlight', 'line-opacity', 0.8);
   });
 
-  // Click to proceed to next stage
-  map.on('click', 'route-layer', () => {
+  // Remove highlight when leaving route
+  map.on('mouseleave', 'route-layer', () => {
     if (currentStage !== 'wind') return;
-    windActive = false;
-    cancelAnimationFrame(animationFrame);
-    windCtx.clearRect(0, 0, windCanvas.width, windCanvas.height);
-
-    currentStage = 'shade';
-    document.querySelector('.floating-prompt').innerHTML = `
-      <p class="instruction">Next: Seek out the shaded paths.</p>
-      <p class="continue">(Hover and click when ready)</p>
-    `;
-    console.log('WIND stage complete → SHADE stage next.');
+    map.setPaintProperty('route-highlight', 'line-opacity', 0);
+    windOverlay.style.background = 'rgba(200,230,255,0)';
   });
+
+  // ✅ Global click to continue (anywhere on page)
+  function handleWindComplete() {
+    if (currentStage !== 'wind') return;
+
+    console.log('WIND stage complete → SHADE stage next.');
+    console.log('WIND value captured:', windValue.toFixed(2));
+
+    // Fade out WIND overlay
+    windOverlay.style.opacity = 0;
+
+    // Update prompt for next stage
+    promptContainer.innerHTML = `
+      <p class="instruction">Next: Notice where shade lingers.</p>
+      <p class="continue">(Click anywhere to continue)</p>
+    `;
+
+    // Move to next stage
+    currentStage = 'shade';
+
+    // Trigger SHADE stage (if implemented)
+    if (typeof startShadeInteraction === 'function') {
+      startShadeInteraction();
+    }
+
+    // Remove listener so it doesn't trigger multiple times
+    document.body.removeEventListener('click', handleWindComplete);
+  }
+
+  document.body.addEventListener('click', handleWindComplete);
 }
 
-// Expose function globally
-window.startWindInteraction = startWindInteraction;

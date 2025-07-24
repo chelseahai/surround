@@ -29,22 +29,28 @@
     <!-- PANEL 3: THE WINDOW -->
     <div class="panel" id="panel3">
       <div id="window-panel" class="window-container">
-        <div class="window-overlay">
+        
+        <!-- Map window frame (starts centered) -->
+        <div class="window-frame map-window">
           <div class="window-inputs">
             <input type="text" id="start-location" placeholder="Start location" />
             <input type="text" id="end-location" placeholder="Destination" />
             <button id="route-btn">Show Route</button>
           </div>
-          <div id="window-view">
-            <div id="map-container"></div>
-            <canvas id="sky-canvas"></canvas>
-            <div id="glare-overlay"></div> 
-          </div>
+          <div id="map-container"></div>
+        </div>
+
+        <!-- Visualization window frame (hidden initially) -->
+        <div class="window-frame viz-window">
+          <canvas id="sky-canvas"></canvas>
+          <div id="glare-overlay"></div> 
+          <div id="wind-overlay"></div>
           <div class="floating-prompt">
             <p class="question">Where are you going today?</p>
             <p class="instruction">Type your route—your journey will shape the sky.</p>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -56,7 +62,8 @@
 
   <script src="script.js"></script>
   <script src="bed/bed.js"></script>
-  <script src="window/sun.js"></script>
+  <script src="window/wind.js"></script>
   <script src="window/window.js"></script>
 </body>
 </html>
+
