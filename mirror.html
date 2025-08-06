@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mirror - Urban Aware Interface</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mirror/mirror.css" />
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-item">
+        <span class="page-number">01</span>
+        <span>Intro</span>
+      </a>
+      <a href="mirror.html" class="nav-item active">
+        <span class="page-number">02</span>
+        <span>Mirror</span>
+      </a>
+      <a href="window.html" class="nav-item">
+        <span class="page-number">03</span>
+        <span>Window</span>
+      </a>
+      <a href="wardrobe.html" class="nav-item">
+        <span class="page-number">04</span>
+        <span>Wardrobe</span>
+      </a>
+      <a href="door.html" class="nav-item">
+        <span class="page-number">05</span>
+        <span>Door</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Mirror Container -->
+  <div id="mirror-container">
+    <div class="mirror-frame">
+      <div class="mirror-glass">
+        <div id="ghost-figure">
+          <div id="aura-layer"></div>
+          <div class="ghost-flow"></div>
+          <div class="ghost-flow"></div>
+          <div class="ghost-flow"></div>
+          <div class="ghost-flow"></div>
+          <div id="body-core">
+            <div class="ghost-head">
+            </div>
+          </div>
+        </div>
+        <div id="sparkle-container"></div>
+      </div>
+    </div>
+    <div id="floating-prompt"></div>
+    <div id="interaction-layer"></div>
+  </div>
+
+  <div id="custom-cursor"></div>
+
+  <script src="script.js"></script>
+  <script src="mirror/mirror.js"></script>
+</body>
+</html> 

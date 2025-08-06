@@ -1,0 +1,27 @@
+/* Wardrobe Page Styles */
+
+#wardrobe-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7faff;
+}
+
+.wardrobe-content {
+  text-align: center;
+  color: #333;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.wardrobe-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.wardrobe-content p {
+  font-size: 1.2rem;
+  color: #999;
+} 

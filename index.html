@@ -10,17 +10,59 @@
   <link rel="stylesheet" href="window/window.css" />
 </head>
 <body>
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <a href="#" class="nav-item" data-panel="0">
+        <span class="page-number">01</span>
+        <span>Intro</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="1">
+        <span class="page-number">02</span>
+        <span>Mirror</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="2">
+        <span class="page-number">03</span>
+        <span>Window</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="3">
+        <span class="page-number">04</span>
+        <span>Wardrobe</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="4">
+        <span class="page-number">05</span>
+        <span>Door</span>
+      </a>
+    </div>
+  </nav>
+
   <div id="container">
     <div class="panel" id="panel1">Intro</div>
 
     <!-- PANEL 2: THE MIRROR -->
     <div class="panel" id="panel2">
       <div id="mirror-container">
-        <div id="ghost-figure">
-          <div id="aura-layer"></div>
-          <div id="body-core"></div>
+        <div class="mirror-frame">
+          <div class="mirror-glass">
+            <div id="ghost-figure">
+              <div id="aura-layer"></div>
+              <div class="ghost-flow"></div>
+              <div class="ghost-flow"></div>
+              <div class="ghost-flow"></div>
+              <div class="ghost-flow"></div>
+              <div id="body-core">
+                <div class="ghost-head">
+                </div>
+              </div>
+              <div class="face-layer">
+                <div class="face-element eye" style="top: 35px; left: 35px;"></div>
+                <div class="face-element eye" style="top: 35px; right: 35px;"></div>
+                <div class="face-element mouth" style="top: 55px; left: 50%; transform: translateX(-50%);"></div>
+              </div>
+            </div>
+            <div id="sparkle-container"></div>
+          </div>
         </div>
-        <div id="sparkle-container"></div>
         <div id="floating-prompt"></div>
         <div id="interaction-layer"></div>
       </div>
@@ -59,7 +101,7 @@
     </div>
 
     <div class="panel" id="panel4">Wardrobe</div>
-    <div class="panel" id="panel5">Door / Mirror</div>
+    <div class="panel" id="panel5">Door</div>
   </div>
 
   <div id="custom-cursor"></div>
@@ -68,5 +110,6 @@
   <script src="bed/bed.js"></script>
   <script src="window/wind.js"></script>
   <script src="window/window.js"></script>
+  <script src="window/mirror.js"></script>
 </body>
 </html>

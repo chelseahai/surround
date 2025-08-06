@@ -1,0 +1,381 @@
+/* Mirror Page Specific Styles */
+
+/* --- GHOST MIRROR --- */
+#mirror-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #f8f9fb 0%, #e3e6eb 100%);
+  overflow: hidden;
+  cursor: none;
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { 
+    background: radial-gradient(circle at center, #f8f9fb 0%, #e3e6eb 100%);
+  }
+  25% { 
+    background: radial-gradient(circle at 30% 30%, #f8f9fb 0%, #e3e6eb 100%);
+  }
+  50% { 
+    background: radial-gradient(circle at 70% 70%, #f8f9fb 0%, #e3e6eb 100%);
+  }
+  75% { 
+    background: radial-gradient(circle at 70% 30%, #f8f9fb 0%, #e3e6eb 100%);
+  }
+}
+
+/* Mirror Frame - Minimal Modern Design */
+.mirror-frame {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.mirror-glass {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(1px);
+  overflow: hidden;
+}
+
+.mirror-glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.03) 50%, 
+    transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Ghost Figure */
+#ghost-figure {
+  position: relative;
+  width: 180px;
+  height: 280px;
+  z-index: 1;
+  transition: all 1.2s ease;
+  animation: gentleFloat 8s ease-in-out infinite;
+  margin: auto;
+  margin-top: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ghost-figure:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(0.3deg); }
+  50% { transform: translateY(-3px) rotate(-0.2deg); }
+  75% { transform: translateY(-8px) rotate(0.1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+#aura-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center 30%, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(200, 220, 255, 0.08) 40%, 
+    rgba(150, 200, 255, 0.04) 70%, 
+    transparent 100%);
+  filter: blur(60px);
+  transition: all 0.8s ease;
+  animation: auraPulse 6s ease-in-out infinite;
+}
+
+@keyframes auraPulse {
+  0%, 100% { 
+    opacity: 0.4; 
+    transform: scale(1) rotate(0deg);
+    filter: blur(60px) brightness(1);
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.05) rotate(1deg);
+    filter: blur(50px) brightness(1.1);
+  }
+}
+
+#body-core {
+  position: relative;
+  width: 140px;
+  height: 200px;
+  background: linear-gradient(180deg, 
+    rgba(230, 220, 255, 0.95) 0%, 
+    rgba(220, 210, 250, 0.9) 30%, 
+    rgba(210, 200, 245, 0.85) 60%, 
+    rgba(200, 190, 240, 0.8) 100%);
+  border-radius: 70px 70px 0 0;
+  box-shadow: 
+    0 0 25px rgba(200, 190, 255, 0.4),
+    inset 0 0 20px rgba(220, 210, 250, 0.3);
+  opacity: 0.9;
+  transition: all 0.6s ease;
+  animation: bodyGlow 7s ease-in-out infinite;
+}
+
+@keyframes bodyGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 20px rgba(200, 190, 255, 0.3),
+      inset 0 0 15px rgba(220, 210, 250, 0.2);
+    opacity: 0.85;
+  }
+  50% { 
+    box-shadow: 
+      0 0 30px rgba(200, 190, 255, 0.4),
+      inset 0 0 20px rgba(220, 210, 250, 0.3);
+    opacity: 0.9;
+  }
+}
+
+/* Ghost head area (integrated into body) */
+.ghost-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  border-radius: 70px 70px 0 0;
+  opacity: 0.95;
+  transition: all 0.6s ease;
+}
+
+#interaction-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: none;
+}
+
+/* Enhanced sparkle container */
+#sparkle-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Individual sparkle particles with enhanced effects */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #eee1f7 0%, #e2c1f7 60%, #d4a1f7 80%, transparent 100%);
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: sparkle-fade 8.0s ease-out forwards;
+  box-shadow: 0 0 8px rgba(238, 225, 247, 0.6);
+}
+
+.sparkle:nth-child(odd) {
+  animation-duration: 10.0s;
+  background: radial-gradient(circle, #e2c1f7 0%, #d4a1f7 60%, #c681f7 80%, transparent 100%);
+}
+
+.sparkle:nth-child(3n) {
+  animation-duration: 12.0s;
+  background: radial-gradient(circle, #f0e1f7 0%, #e8c1f7 60%, #e0a1f7 80%, transparent 100%);
+}
+
+@keyframes sparkle-fade {
+  0% {
+    transform: scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1) rotate(180deg);
+    opacity: 0.9;
+  }
+  80% {
+    transform: scale(2.5) rotate(360deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4.0) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Enhanced floating prompt */
+#floating-prompt {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 220px;
+  font-size: 0.9rem;
+  color: rgba(80, 80, 100, 0.85);
+  font-family: 'DM Sans', sans-serif;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+  text-align: left;
+  line-height: 1.5em;
+  transition: all 0.8s ease;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+#floating-prompt .question {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.6em;
+  color: #ecd4fc;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#floating-prompt .instruction {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.8;
+  margin-bottom: 0.8em;
+}
+
+.soft-action {
+  font-style: italic;
+  color: rgba(140, 140, 160, 0.8);
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 0.8em;
+}
+
+/* Enhanced floating animation */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(-50%) translateX(0) rotate(0deg); 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  50% { 
+    transform: translateY(-52%) translateX(4px) rotate(0.5deg); 
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Floating particles for mirror page */
+.floating-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleFloat 15s linear infinite;
+}
+
+.floating-particle:nth-child(odd) {
+  width: 3px;
+  height: 3px;
+  background: rgba(200, 220, 255, 0.4);
+  animation-duration: 20s;
+}
+
+.floating-particle:nth-child(3n) {
+  width: 1px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  animation-duration: 12s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Organic flowing elements */
+.ghost-flow {
+  position: absolute;
+  background: rgba(200, 190, 255, 0.3);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: flowFloat 6s ease-in-out infinite;
+}
+
+.ghost-flow:nth-child(1) {
+  width: 25px;
+  height: 35px;
+  top: -15px;
+  left: -8px;
+  animation-delay: 0s;
+}
+
+.ghost-flow:nth-child(2) {
+  width: 20px;
+  height: 30px;
+  top: 60px;
+  right: -10px;
+  animation-delay: 1s;
+}
+
+.ghost-flow:nth-child(3) {
+  width: 22px;
+  height: 32px;
+  bottom: -20px;
+  left: 15px;
+  animation-delay: 2s;
+}
+
+.ghost-flow:nth-child(4) {
+  width: 18px;
+  height: 25px;
+  top: 120px;
+  left: -5px;
+  animation-delay: 3s;
+}
+
+@keyframes flowFloat {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateY(-8px) scale(1.1);
+    opacity: 0.5;
+  }
+} 

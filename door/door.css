@@ -1,0 +1,27 @@
+/* Door Page Styles */
+
+#door-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eef5f8;
+}
+
+.door-content {
+  text-align: center;
+  color: #333;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.door-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.door-content p {
+  font-size: 1.2rem;
+  color: #999;
+} 

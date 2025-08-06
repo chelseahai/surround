@@ -1,5 +1,6 @@
 const container = document.getElementById('container');
 const panels = document.querySelectorAll('.panel');
+const navItems = document.querySelectorAll('.nav-item');
 
 let currentIndex = 0;
 let lastScrollTime = 0;
@@ -26,6 +27,11 @@ function applyFade(activeIndex) {
     panel.classList.remove('fade-in', 'fade-out');
   });
 
+  // Update navigation active state
+  navItems.forEach((item, i) => {
+    item.classList.toggle('active', i === activeIndex);
+  });
+
   requestAnimationFrame(() => {
     panels.forEach((panel, i) => {
       if (i === activeIndex) {
@@ -38,9 +44,25 @@ function applyFade(activeIndex) {
 
     setTimeout(() => {
       document.body.style.backgroundColor = bgColors[activeIndex];
+      
+      // Activate mirror page when panel 2 is active
+      if (activeIndex === 1 && window.mirrorPage) {
+        window.mirrorPage.activate();
+      } else if (window.mirrorPage) {
+        window.mirrorPage.deactivate();
+      }
     }, 400);
   });
 }
+
+// Navigation click handlers
+navItems.forEach((item, index) => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    currentIndex = index;
+    scrollToPanel(currentIndex);
+  });
+});
 
 window.addEventListener('wheel', (e) => {
   const now = Date.now();
